@@ -11,6 +11,7 @@ import CoreImage
 class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var intensity: UISlider!
+    @IBOutlet var radius: UISlider!
     @IBOutlet var changeFilterButton: UIButton!
     
     var currentImage: UIImage!
@@ -42,7 +43,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         let inputKeys = currentFilter.inputKeys
         
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey) }
-        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(intensity.value * 200, forKey: kCIInputRadiusKey) }
+        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(radius.value * 200, forKey: kCIInputRadiusKey) }
         if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey) }
         if inputKeys.contains(kCIInputCenterKey) { currentFilter.setValue(CIVector(x: currentImage.size.width / 2, y: currentImage.size.height / 2), forKey: kCIInputCenterKey) }
         
@@ -53,16 +54,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
     }
     
     func setFilter(action: UIAlertAction) {
+        print("current filter", currentFilter)
+        print("action title", action.title)
+        print("reconstructed filter name", reconstructFilterName(name: action.title!) )
+        
         // make sure we have a valid image before continuing!
         guard currentImage != nil else { return }
         
         // safely read the alert action's title
         guard let actionTitle = action.title else { return }
         
-        currentFilter = CIFilter(name: actionTitle)
+        guard let filterNameCI = reconstructFilterName(name: actionTitle) else { return }
+        currentFilter = CIFilter(name: filterNameCI )
         
-        print(filterName())
-        changeFilterButton.titleLabel?.text = filterName()
+        
+        changeFilterButton.titleLabel?.text = filterName(name: filterNameCI)
         
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
@@ -70,8 +76,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         applyProcessing()
     }
     
-    func filterName() -> String {
-        let tempName = currentFilter.name
+    func reconstructFilterName(name: String) -> String? {
+//        var tempName = ""
+        if !name.hasPrefix("CI") {
+//            let ci = "CI"
+            return name.components(separatedBy: " ").compactMap { $0 }.reduce("CI") { $0 + $1}
+        }
+        return nil
+    }
+    
+    func filterName(name: String) -> String {
+        let tempName = name
         var tempNameNoPrefix = tempName.deletingPrefix("CI")
         
         let capitalIndeces = findCapitalIndeces(str: tempNameNoPrefix)
@@ -134,13 +149,13 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
     
     @IBAction func changeFilter(_ sender: Any) {
         let ac = UIAlertController(title: "Choose filter", message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "CIBumpDistortion", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CIGaussianBlur", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CIPixellate", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CISepiaTone", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CITwirlDistortion", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CIUnsharpMask", style: .default, handler: setFilter))
-        ac.addAction(UIAlertAction(title: "CIVignette", style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CIBumpDistortion"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CIGaussianBlur"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CIPixellate"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CISepiaTone"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CITwirlDistortion"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CIUnsharpMask"), style: .default, handler: setFilter))
+        ac.addAction(UIAlertAction(title: filterName(name: "CIVignette"), style: .default, handler: setFilter))
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
     }
@@ -159,6 +174,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
     @IBAction func intensityChanged(_ sender: Any) {
         applyProcessing()
     }
+    
+    @IBAction func radiusChanged(_ sender: Any) {
+        applyProcessing()
+    }
+    
     
 }
 
