@@ -46,10 +46,10 @@
                                     <action selector="intensityChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="XeA-Nd-wJl"/>
                                 </connections>
                             </slider>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3HJ-t2-HQ5">
-                                <rect key="frame" x="17" y="644" width="120" height="44"/>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3HJ-t2-HQ5">
+                                <rect key="frame" x="17" y="644" width="180" height="44"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="120" id="bH8-LZ-62x"/>
+                                    <constraint firstAttribute="width" constant="180" id="bH8-LZ-62x"/>
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Change filter">
@@ -59,7 +59,7 @@
                                     <action selector="changeFilter:" destination="BYZ-38-t0r" eventType="touchUpInside" id="tm4-sf-xge"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5l-sL-aE2">
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="trailing" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q5l-sL-aE2">
                                 <rect key="frame" x="335" y="644" width="60" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="72x-U5-MR6"/>

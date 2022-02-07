@@ -60,13 +60,57 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
         guard let actionTitle = action.title else { return }
         
         currentFilter = CIFilter(name: actionTitle)
-        changeFilterButton.titleLabel?.text = actionTitle
+        
+        print(filterName())
+        changeFilterButton.titleLabel?.text = filterName()
         
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
         
         applyProcessing()
     }
+    
+    func filterName() -> String {
+        let tempName = currentFilter.name
+        var tempNameNoPrefix = tempName.deletingPrefix("CI")
+        
+        let capitalIndeces = findCapitalIndeces(str: tempNameNoPrefix)
+        
+        if capitalIndeces.isEmpty {
+            // do nothing
+        } else {
+            for i in 0 ..< capitalIndeces.count {
+                let indexOfCap = capitalIndeces[i]
+
+                tempNameNoPrefix.insert(" ", at: tempNameNoPrefix.index(tempNameNoPrefix.startIndex, offsetBy: indexOfCap))
+            }
+        }
+        return tempNameNoPrefix
+    }
+    
+    
+    func findCapitalIndeces(str: String) -> [Int] {
+        var indexOfCapital = [Int]()
+        var indexCount = 0
+        
+        for character in str {
+            
+            if indexCount == 0 {
+                indexCount += 1
+                continue
+            } else if character.isUppercase {
+                indexOfCapital.append(indexCount)
+            }
+            indexCount += 1
+        }
+        
+        indexOfCapital.reverse()
+        return indexOfCapital
+    }
+
+
+
+
     
     @objc func importPicture() {
         let picker = UIImagePickerController()
@@ -118,3 +162,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate & UINavi
     
 }
 
+
+extension String {
+    func deletingPrefix(_ prefix: String) -> String {
+        guard self.hasPrefix(prefix) else { return self }
+        return String(self.dropFirst(prefix.count))
+    }
+}
