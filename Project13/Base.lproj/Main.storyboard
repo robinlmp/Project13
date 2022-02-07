@@ -94,6 +94,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="QiZ-vV-Cav"/>
                     <connections>
+                        <outlet property="changeFilterButton" destination="3HJ-t2-HQ5" id="Fx7-TL-j7z"/>
                         <outlet property="imageView" destination="HV0-m6-B85" id="ILb-PP-bf0"/>
                         <outlet property="intensity" destination="km4-wa-YYu" id="Obe-fq-kk2"/>
                     </connections>
